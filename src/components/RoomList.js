@@ -6,11 +6,14 @@ class RoomList extends Component {
      super(props);
 
      this.state = {
-     rooms: []
+     rooms: [],
+     newRoomName: ''
      };
 
  this.roomsRef = fire.database().ref('rooms');
 
+ this.handleChange = this.handleChange.bind(this);
+this.createRoom = this.createRoom.bind(this);
    }
 
    componentDidMount() {
@@ -22,14 +25,35 @@ class RoomList extends Component {
      });
    }
 
+  handleChange(event) {
+    this.setState({newRoomName: event.target.value});
+  }
+
+  createRoom(event) {
+    this.roomsRef.push({
+      name: this.state.newRoomName
+    });
+    event.preventDefault();
+    //console.log(newRoomName)
+  }
+
   render() {
-    console.log(this.roomsRef)
+    console.log(this.state.newRoomName)
    return (
+     <section>
+     <form onSubmit={this.createRoom}>
+        <label>
+          Room Name:
+          <input type="text" value={this.state.newRoomName} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
      <section className='roomlist'>
      {
        this.state.rooms.map( (room, index) =>
        <div key={index}>{room.name}</div>
      )}
+     </section>
      </section>
     );
   }
