@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import fire from './../fire';
+//import fire from './../fire';
 
 class RoomList extends Component {
   constructor(props) {
@@ -10,10 +10,9 @@ class RoomList extends Component {
      newRoomName: ''
      };
 
- this.roomsRef = fire.database().ref('rooms');
-
+ this.roomsRef = this.props.firebase.database().ref('rooms');
  this.handleChange = this.handleChange.bind(this);
-this.createRoom = this.createRoom.bind(this);
+ this.createRoom = this.createRoom.bind(this);
    }
 
    componentDidMount() {
@@ -30,7 +29,7 @@ this.createRoom = this.createRoom.bind(this);
   }
 
   createRoom(event) {
-    this.roomsRef.push({
+    this.props.roomsRef.push({
       name: this.state.newRoomName
     });
     event.preventDefault();
@@ -38,7 +37,6 @@ this.createRoom = this.createRoom.bind(this);
   }
 
   render() {
-    console.log(this.state.newRoomName)
    return (
      <section>
      <form onSubmit={this.createRoom}>
@@ -51,7 +49,7 @@ this.createRoom = this.createRoom.bind(this);
      <section className='roomlist'>
      {
        this.state.rooms.map( (room, index) =>
-       <div key={index}>{room.name}</div>
+       <div key={index} onClick={() => this.props.roomClick(room)}> {room.name} </div>
      )}
      </section>
      </section>
